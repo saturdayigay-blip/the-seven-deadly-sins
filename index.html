@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="us-ascii">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Seven Deadly Sins and Seven Virtues Quiz (Beta)</title>
+<style>
+:root{color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#000;--panel:#1c1c1e;--ink:#f2f2f7;--mute:#8e8e93;--line:#2c2c2e;--blue:#8aa4bb;--red:#c9807a}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px);-webkit-tap-highlight-color:transparent}
+body{margin:0;min-height:100%;display:flex;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.5}
+section{margin:auto;width:100%;max-width:560px;padding:60px clamp(16px,5vw,28px) 28px}
+section.hidden{display:none}
+#res{max-width:880px}
+h1{font-size:clamp(1.45rem,5.6vw,2rem);line-height:1.2;margin:0 0 .4em;text-align:center;font-weight:600;letter-spacing:-.01em}
+h2{font-size:clamp(1.3rem,5vw,1.7rem);line-height:1.2;margin:0 0 .6em;text-align:center;font-weight:600}
+h3{font-size:.8rem;font-weight:500;color:var(--mute);margin:0 0 10px}
+.sub{text-align:center;color:var(--mute);margin:0 0 1em;font-size:.95rem}
+.beta{font-size:.7rem;font-weight:600;color:var(--mute);background:var(--line);border-radius:99px;padding:.15em .6em;vertical-align:middle;white-space:nowrap}
+.disc{font-size:.8rem;line-height:1.55;color:var(--mute);background:var(--panel);border-radius:12px;padding:14px 16px;margin:16px 0}
+.disc b{color:var(--ink)}
+.hint{text-align:center;font-size:1rem;font-weight:500;color:var(--mute);margin-top:20px;animation:p 1.8s ease-in-out infinite}
+@keyframes p{50%{opacity:.35}}
+@media (prefers-reduced-motion:reduce){.hint{animation:none}}
+#fs{position:fixed;top:0;right:0;z-index:5;padding:calc(env(safe-area-inset-top,0px) + 10px) 12px 10px;background:none;border:0;color:var(--mute);cursor:pointer}
+#fs svg{display:block;box-sizing:content-box;padding:8px}
+button:focus-visible{outline:2px solid var(--mute);outline-offset:2px;border-radius:12px}
+.meta{font-size:.8rem;color:var(--mute);margin-bottom:8px;text-align:center}
+.bar{height:3px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--ink);transition:width .3s}
+.q{font-size:clamp(1.15rem,4.5vw,1.5rem);font-weight:500;min-height:5.8em;display:flex;align-items:center;justify-content:center;text-align:center;margin:20px 0}
+.ans{display:flex;justify-content:center;gap:clamp(32px,12vw,72px)}
+.btn{font:inherit;border:0;background:none;padding:0;cursor:pointer;color:var(--ink)}
+.ans .btn{width:84px;height:64px;font-size:2rem;font-weight:400;line-height:1}
+.ans .y{color:var(--blue)}
+.ans .n{color:var(--red)}
+.btn.pri{display:block;margin:20px auto 0;background:var(--ink);color:var(--bg);font-size:.95rem;font-weight:600;border-radius:12px;padding:12px 22px}
+.btn:active{opacity:.55}
+.link{display:block;margin:12px auto 0;background:none;border:0;color:var(--mute);font-size:.85rem;font-family:inherit;text-decoration:underline;text-underline-offset:3px;text-decoration-color:#48484a;cursor:pointer;padding:8px}
+.top{display:grid;gap:12px;margin:14px 0 22px}
+@media (min-width:560px){.top{grid-template-columns:1fr 1fr}}
+.grp{background:var(--panel);border-radius:12px;padding:14px 16px}
+.it+.it{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.it div{display:flex;justify-content:space-between;gap:8px}
+.it span{color:var(--mute)}
+.it p{margin:2px 0 0;font-size:.82rem;color:var(--mute)}
+.res{display:grid;gap:18px;margin-top:14px}
+@media (min-width:820px){.res{grid-template-columns:1fr 1fr;align-items:center}}
+.row{margin:11px 0;font-size:.88rem}
+.row div:first-child{display:flex;justify-content:space-between;gap:8px;margin-bottom:4px}
+.row .t{height:6px;background:var(--line);border-radius:99px;overflow:hidden}
+.row .t i{display:block;height:100%;border-radius:99px}
+svg.radar{width:100%;height:auto;max-width:420px;display:block;margin:0 auto}
+.radar text{fill:var(--ink);font:500 13px system-ui,-apple-system,sans-serif}
+.radar .g{fill:none;stroke:#3a3a3c;stroke-width:1}
+</style>
+</head>
+<body>
+<button id="fs" aria-label="Toggle full screen" title="Full screen"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+
+<section id="intro">
+  <div class="card">
+    <h1>Seven Deadly Sins and Seven Virtues <span class="beta">Beta</span></h1>
+    <p class="sub">A 20-question self-reflection quiz. English only for now.</p>
+    <div class="disc" data-disc></div>
+    <p class="sub">Each statement has two answers: O (yes, that sounds like me) or X (no, it does not). Questions are drawn at random from a large bank, so every round is different.</p>
+    <div class="hint" id="hint"></div>
+  </div>
+</section>
+
+<section id="quiz" class="hidden">
+  <div class="card">
+    <div class="meta" id="cnt"></div>
+    <div class="bar"><i id="pg"></i></div>
+    <div class="q" id="qt"></div>
+    <div class="ans">
+      <button class="btn y" id="by" aria-label="Yes (O)">O</button>
+      <button class="btn n" id="bn" aria-label="No (X)">X</button>
+    </div>
+    <div class="meta" id="kh" style="margin:12px 0 0"></div>
+    <button class="link" id="bk">Previous question</button>
+  </div>
+</section>
+
+<section id="done" class="hidden">
+  <div class="card">
+    <h2>All 20 questions answered</h2>
+    <p class="sub">Ready to see which sins and virtues showed up in your answers?</p>
+    <button class="btn pri" id="gen">Generate Answers</button>
+    <button class="link" id="bk2">Change my last answer</button>
+  </div>
+</section>
+
+<section id="res" class="hidden">
+  <div class="card">
+    <h2 id="rt"></h2>
+    <div class="top" id="top"></div>
+    <div class="res"><div id="rd"></div><div id="bars"></div></div>
+    <div class="disc" data-disc></div>
+    <button class="btn pri" id="again">Back to Main Screen and Retake</button>
+  </div>
+</section>
+
+<script>
+(function(){
+var N=20;
+var AX=[
+{n:"Pride",v:"Humility",c:"#8e5bd6",d:"An inflated sense of your own importance or superiority."},
+{n:"Greed",v:"Charity",c:"#d4a017",d:"A strong urge to gather and keep more than you need."},
+{n:"Lust",v:"Chastity",c:"#d9487d",d:"Intense, impulsive craving that can override good judgment."},
+{n:"Envy",v:"Kindness",c:"#3f9e5c",d:"Resentment of what other people have or achieve."},
+{n:"Gluttony",v:"Temperance",c:"#e07b2a",d:"Overindulgence and trouble knowing when enough is enough."},
+{n:"Wrath",v:"Patience",c:"#d13438",d:"Quick, intense anger and a habit of holding on to it."},
+{n:"Sloth",v:"Diligence",c:"#4f86c6",d:"Avoiding effort, putting things off and leaving work undone."}];
+/* Per axis: [statements where YES = sin], [statements where YES = virtue] */
+var B=[
+[["I often feel I am smarter than most people around me.","I hate admitting I was wrong, even when it is obvious.","I enjoy being admired more than I enjoy helping.","I get defensive when someone criticizes my work."],
+ ["I readily give others credit for shared success.","I can laugh at my own mistakes.","I ask for help when I do not know something.","I am glad when someone else gets the spotlight."]],
+[["I feel uneasy sharing my belongings, even with friends.","No matter how much I have, I want more.","I keep track of exactly who owes me what.","I would take a higher-paying job even if I disliked it."],
+ ["I give my money or time without expecting thanks.","I happily pick up the bill for a friend now and then.","I would give up something I love to help a stranger.","I feel content with what I already own."]],
+[["I often act on impulse to chase a thrill.","I find it hard to focus when someone attractive is nearby.","I have bent my own rules for a fleeting rush.","I daydream about passion more than I plan my day."],
+ ["I respect boundaries even when I feel a strong pull.","I value commitment over excitement.","I can enjoy attraction without letting it steer my choices.","I am comfortable waiting for what is truly meaningful."]],
+[["A friend's success sometimes stings me.","I compare my life to other people's posts a lot.","I have secretly hoped a rival would stumble.","I feel resentful when others get what I wanted."],
+ ["I sincerely celebrate when friends get good news.","I am grateful for what I have instead of eyeing what others have.","I compliment people even when they are ahead of me.","Other people's achievements inspire me rather than annoy me."]],
+[["I keep snacking or scrolling long after I meant to stop.","I find it hard to leave the last piece of something tasty.","I buy small treats on impulse almost every week.","I often take a second helping without being hungry."],
+ ["I stop when I have had enough.","I can say no to a tempting extra helping.","I enjoy simple pleasures in moderation.","I plan my snacks, shows and shopping on purpose."]],
+[["Small annoyances can make me snap at people.","I hold grudges for a long time.","I raise my voice when I disagree.","I have imagined getting even with someone."],
+ ["I take a breath before replying when I am upset.","I forgive people quickly.","I stay calm in traffic and long queues.","I listen to the end before I react."]],
+[["I often put tasks off until the last minute.","I skip things I should do because I do not feel like it.","I hit the snooze button more than once most mornings.","I leave chores unfinished for days."],
+ ["I finish what I start, even when it is boring.","I do the hard task first.","I keep a steady daily routine.","I take initiative without being asked."]]];
+var DISC="<b>Disclaimer:</b> This quiz is for entertainment purposes only. It is not a psychological, medical, religious or other professional assessment, and it provides no professional certification or diagnosis. Results come from a few simple self-reported answers and a randomly chosen set of questions, so treat them as a light-hearted reflection. Do not use them to judge yourself or anyone else, or to make decisions about health, work, relationships or faith. If you have concerns about your wellbeing, please talk to a qualified professional. This is a beta version (English only). Your answers stay on this device and are not stored or sent anywhere.";
+
+var $=function(i){return document.getElementById(i)};
+var touch=matchMedia("(hover: none), (pointer: coarse)").matches;
+var qs=[],ans=[],idx=0,cur="intro";
+
+function sh(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+function show(id){cur=id;["intro","quiz","done","res"].forEach(function(x){$(x).classList.toggle("hidden",x!==id)});window.scrollTo(0,0)}
+function build(){
+  var order=sh([0,1,2,3,4,5,6]);
+  var pools=B.map(function(b,i){var p=[];b[0].forEach(function(t){p.push({a:i,t:t,s:true})});b[1].forEach(function(t){p.push({a:i,t:t,s:false})});return sh(p)});
+  qs=[];for(var i=0;i<N;i++)qs.push(pools[order[i%7]].pop());
+  sh(qs);
+}
+function start(){build();ans=[];idx=0;show("quiz");render()}
+function render(){
+  $("cnt").textContent="Question "+(idx+1)+" of "+N;
+  $("pg").style.width=(idx/N*100)+"%";
+  $("qt").textContent=qs[idx].t;
+  $("bk").style.visibility=idx?"visible":"hidden";
+}
+function answer(yes){
+  if(cur!=="quiz")return;
+  ans[idx]=yes;idx++;
+  if(idx>=N){$("pg").style.width="100%";show("done")}else render();
+}
+function back(){if(idx>0){idx--;show("quiz");render()}}
+
+function result(){
+  var sc=AX.map(function(){return[0,0]});
+  qs.forEach(function(q,i){sc[q.a][1]++;if(q.s===ans[i])sc[q.a][0]++});
+  var pct=sc.map(function(s){return s[1]?Math.round(100*s[0]/s[1]):0});
+  var o=sh(AX.map(function(_,i){return i})).sort(function(a,b){return pct[a]-pct[b]});
+  function it(i,sin){var a=AX[i];return '<div class="it"><div><b>'+(sin?a.n:a.v)+'</b><span>'+(sin?pct[i]:100-pct[i])+'%</span></div><p>'+(sin?a.d:'Opposite of '+a.n+'.')+'</p></div>'}
+  $("rt").textContent="Your results";
+  $("top").innerHTML='<div class="grp"><h3>Greatest sins</h3>'+it(o[6],1)+it(o[5],1)+'</div><div class="grp"><h3>Greatest virtues</h3>'+it(o[0],0)+it(o[1],0)+'</div>';
+
+  var C=200,R=110,LR=132;
+  function pt(i,r){var a=-Math.PI/2+i*2*Math.PI/7;return[C+r*Math.cos(a),C+r*Math.sin(a)]}
+  function f(p){return p[0].toFixed(1)+","+p[1].toFixed(1)}
+  var s='<svg class="radar" viewBox="0 0 400 400" role="img" aria-label="Radar chart of your seven sin scores">';
+  [25,50,75,100].forEach(function(l){s+='<polygon class="g" points="'+AX.map(function(_,i){return f(pt(i,R*l/100))}).join(" ")+'"/>'});
+  AX.forEach(function(_,i){var p=pt(i,R);s+='<line class="g" x1="200" y1="200" x2="'+p[0].toFixed(1)+'" y2="'+p[1].toFixed(1)+'"/>'});
+  s+='<polygon points="'+AX.map(function(_,i){return f(pt(i,R*pct[i]/100))}).join(" ")+'" fill="rgba(255,255,255,.14)" stroke="#fff" stroke-width="2" stroke-linejoin="round"/>';
+  AX.forEach(function(a,i){var p=pt(i,R*pct[i]/100);s+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="4" fill="#fff"/>'});
+  AX.forEach(function(a,i){var p=pt(i,LR),dx=p[0]-C;
+    s+='<text x="'+p[0].toFixed(1)+'" y="'+p[1].toFixed(1)+'" text-anchor="'+(dx<-20?"end":dx>20?"start":"middle")+'" dominant-baseline="middle">'+a.n+'</text>'});
+  $("rd").innerHTML=s+"</svg>";
+
+  $("bars").innerHTML=AX.map(function(a,i){
+    return '<div class="row"><div><span>'+a.n+' (opposite: '+a.v+')</span><b>'+pct[i]+'%</b></div><div class="t"><i style="width:'+pct[i]+'%;background:'+a.c+'"></i></div></div>';
+  }).join("");
+  show("res");
+}
+
+function fs(){
+  var d=document,e=d.documentElement,on=d.fullscreenElement||d.webkitFullscreenElement,p;
+  try{p=on?(d.exitFullscreen||d.webkitExitFullscreen).call(d):(e.requestFullscreen||e.webkitRequestFullscreen).call(e);if(p&&p.catch)p.catch(function(){})}catch(x){}
+}
+
+Array.prototype.forEach.call(document.querySelectorAll("[data-disc]"),function(el){el.innerHTML=DISC});
+$("hint").textContent=touch?"Tap the screen to start":"Press any key to start";
+if(!touch)$("kh").textContent="Keyboard: O = Yes, X = No";
+if(!(document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen))$("fs").hidden=true;
+
+$("fs").addEventListener("click",fs);
+$("intro").addEventListener("click",start);
+$("by").addEventListener("click",function(){answer(true)});
+$("bn").addEventListener("click",function(){answer(false)});
+$("bk").addEventListener("click",back);
+$("bk2").addEventListener("click",function(){idx=N-1;show("quiz");render()});
+$("gen").addEventListener("click",result);
+$("again").addEventListener("click",function(){show("intro")});
+document.addEventListener("keydown",function(e){
+  if(e.ctrlKey||e.metaKey||e.altKey||e.key==="F11"||e.key==="Escape"||e.target===$("fs"))return;
+  if(cur==="intro"){e.preventDefault();start()}
+  else if(cur==="quiz"){
+    var k=e.key.toLowerCase();
+    if(k==="o"||k==="y"||k==="arrowleft")answer(true);
+    else if(k==="x"||k==="n"||k==="arrowright")answer(false);
+    else if(k==="backspace")back();
+  }
+});
+})();
+</script>
+</body>
+</html>
